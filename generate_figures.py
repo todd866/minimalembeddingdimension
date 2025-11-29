@@ -67,11 +67,12 @@ def figure1_helix_vs_circle():
     ax1.plot(x, y, z, 'b-', linewidth=1.5, label='Trajectory')
     ax1.scatter([x[0]], [y[0]], [z[0]], c='green', s=50, zorder=5, label='Start')
     ax1.scatter([x[-1]], [y[-1]], [z[-1]], c='red', s=50, zorder=5, label='End')
-    ax1.set_xlabel('$x_1$ (state)')
-    ax1.set_ylabel('$x_2$ (state)')
-    ax1.set_zlabel('$x_3$ (meta-time)')
+    ax1.set_xlabel('$x_1$', labelpad=2)
+    ax1.set_ylabel('$x_2$', labelpad=2)
+    ax1.set_zlabel('$\\tau$', labelpad=2)
     ax1.set_title('(A) $k=3$: Collision-free')
     ax1.legend(loc='upper left', fontsize=8)
+    ax1.tick_params(axis='both', which='major', labelsize=8)
 
     # Panel B: 2D projection (collisions)
     ax2 = fig.add_subplot(132)
@@ -302,7 +303,8 @@ def figure3_general_cycles():
 
     # Panel B: 3-cycle
     ax2 = axes[1]
-    angles = np.array([np.pi/2, np.pi/2 + 2*np.pi/3, np.pi/2 + 4*np.pi/3])
+    # Rotate triangle so A is not at top (avoiding title collision)
+    angles = np.array([-np.pi/2, -np.pi/2 + 2*np.pi/3, -np.pi/2 + 4*np.pi/3])
     points = np.column_stack([np.cos(angles), np.sin(angles)])
 
     # Draw triangle
@@ -313,14 +315,14 @@ def figure3_general_cycles():
 
     ax2.scatter(points[:, 0], points[:, 1], c=['green', 'orange', 'red'],
                s=100, zorder=5)
-    ax2.text(points[0, 0], points[0, 1]+0.2, 'A', fontsize=12, ha='center')
-    ax2.text(points[1, 0]-0.2, points[1, 1], 'B', fontsize=12, ha='right')
-    ax2.text(points[2, 0]+0.2, points[2, 1], 'C', fontsize=12, ha='left')
-    ax2.text(0, -1.4, '$k_{\\min} = 3$', fontsize=11, ha='center',
+    ax2.text(points[0, 0], points[0, 1]-0.25, 'A', fontsize=12, ha='center', va='top')
+    ax2.text(points[1, 0]+0.2, points[1, 1], 'B', fontsize=12, ha='left')
+    ax2.text(points[2, 0]-0.2, points[2, 1], 'C', fontsize=12, ha='right')
+    ax2.text(0, -1.5, '$k_{\\min} = 3$', fontsize=11, ha='center',
             color='green', fontweight='bold')
 
     ax2.set_xlim(-1.5, 1.5)
-    ax2.set_ylim(-1.6, 1.2)
+    ax2.set_ylim(-1.7, 1.3)
     ax2.set_aspect('equal')
     ax2.set_title('(B) 3-cycle')
     ax2.axis('off')
@@ -328,19 +330,29 @@ def figure3_general_cycles():
     # Panel C: Complex graph with self-reference
     ax3 = axes[2]
 
-    # Draw a more complex graph
+    # Draw a more complex graph - adjusted positions
     pos = {
-        'A': (0, 1),
+        'A': (0, 0.8),
         'B': (-0.8, 0),
         'C': (0.8, 0),
         'D': (0, -0.8)
     }
 
-    # Draw nodes
+    # Draw nodes with offset labels
+    label_offsets = {
+        'A': (0, 0.2),
+        'B': (-0.25, 0),
+        'C': (0.25, 0),
+        'D': (0, -0.25)
+    }
+    label_ha = {'A': 'center', 'B': 'right', 'C': 'left', 'D': 'center'}
+    label_va = {'A': 'bottom', 'B': 'center', 'C': 'center', 'D': 'top'}
+
     for name, (x, y) in pos.items():
         color = 'steelblue' if name != 'D' else 'coral'
         ax3.scatter([x], [y], c=[color], s=150, zorder=5)
-        ax3.text(x, y+0.25, name, fontsize=11, ha='center', va='bottom')
+        ox, oy = label_offsets[name]
+        ax3.text(x+ox, y+oy, name, fontsize=11, ha=label_ha[name], va=label_va[name])
 
     # Draw edges (simplified)
     edges = [('A', 'B'), ('B', 'C'), ('C', 'A'), ('A', 'D'), ('D', 'B')]
@@ -348,17 +360,17 @@ def figure3_general_cycles():
         x1, y1 = pos[start]
         x2, y2 = pos[end]
         dx, dy = x2 - x1, y2 - y1
-        ax3.annotate('', xy=(x2-0.1*dx, y2-0.1*dy),
-                    xytext=(x1+0.1*dx, y1+0.1*dy),
+        ax3.annotate('', xy=(x2-0.12*dx, y2-0.12*dy),
+                    xytext=(x1+0.12*dx, y1+0.12*dy),
                     arrowprops=dict(arrowstyle='->', color='blue', lw=1.5))
 
-    ax3.text(0, -1.4, '$k_{\\min} \\geq 3$', fontsize=11, ha='center',
+    ax3.text(0, -1.5, '$k_{\\min} \\geq 3$', fontsize=11, ha='center',
             color='green', fontweight='bold')
 
     ax3.set_xlim(-1.5, 1.5)
-    ax3.set_ylim(-1.6, 1.4)
+    ax3.set_ylim(-1.7, 1.3)
     ax3.set_aspect('equal')
-    ax3.set_title('(C) Graph with nested cycles')
+    ax3.set_title('(C) Nested cycles')
     ax3.axis('off')
 
     plt.tight_layout()
