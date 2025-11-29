@@ -127,8 +127,12 @@ def figure1_helix_vs_circle():
     ax3.set_xticks(k_values)
     ax3.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
 
-    # Add annotation
-    ax3.annotate('$k_{\\min} = 3$', xy=(3, 5), fontsize=10,
+    # Set y-limits with padding for annotation
+    max_count = max(collision_counts)
+    ax3.set_ylim(-0.5, max_count * 1.3)
+
+    # Add annotation - position relative to data
+    ax3.annotate('$k_{\\min} = 3$', xy=(3, max_count * 0.15), fontsize=10,
                 ha='center', color='green', fontweight='bold')
 
     plt.tight_layout()
