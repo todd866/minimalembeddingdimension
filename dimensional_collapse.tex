@@ -40,7 +40,7 @@ Sydney Medical School, University of Sydney\\
 \maketitle
 
 \begin{abstract}
-We study the problem of embedding recurrent processes on statistical manifolds into Euclidean spaces of minimal dimension while preserving temporal distinctness. A \emph{self-intersection} occurs when two temporally distinct points of a trajectory are mapped to the same point in the embedding space. We show that for a class of cyclic processes with strictly monotone meta-time---including recurrent neural dynamics, biological oscillators, and symbolic state transitions---any continuous embedding into $\R^2$ that preserves the cyclic structure necessarily produces self-intersections, whereas self-intersection-free embeddings into $\R^3$ always exist. This establishes $k=3$ as a critical dimension threshold for these processes: $k \leq 2$ forces categorical discretization through unavoidable state conflation, while $k \geq 3$ preserves the continuous structure of temporal dynamics. We interpret this result in terms of metric degeneracy under dimensional collapse: the Fisher information metric loses rank when the meta-time coordinate is projected out.
+We study the problem of embedding recurrent processes on statistical manifolds into Euclidean spaces of minimal dimension while preserving temporal distinctness. A \emph{self-intersection} occurs when two temporally distinct points of a trajectory are mapped to the same point in the embedding space. We show that for a class of cyclic processes with strictly monotone meta-time---including recurrent neural dynamics, biological oscillators, and symbolic state transitions---any continuous embedding into $\R^2$ that preserves the cyclic structure necessarily produces self-intersections, whereas self-intersection-free embeddings into $\R^3$ always exist. This establishes $k=3$ as a critical dimension threshold for this class of recurrent processes: $k \leq 2$ forces categorical discretization through unavoidable state conflation, while $k \geq 3$ preserves the continuous structure of temporal dynamics. We interpret this result in terms of metric degeneracy under dimensional collapse: the Fisher information metric loses rank when the meta-time coordinate is projected out.
 \end{abstract}
 
 \noindent\textbf{Keywords:} information geometry, dimensional reduction, statistical manifolds, embedding dimension, recurrent dynamics
@@ -135,7 +135,7 @@ Our main result characterizes when self-intersection-free embeddings exist:
 \begin{theorem}[Minimal Embedding Dimension]\label{thm:main}
 Let $\gamma: [0, T] \to \M$ be a cyclic process with monotone meta-time as in Definition~\ref{def:cyclic}, with phase projection $\theta: \M \to S^1$ and meta-time $\tau$. Then:
 \begin{enumerate}
-    \item[(i)] For any continuous $\pi_2: \M \to \R^2$ such that there exists a simple closed curve $C \subset \R^2$ and a continuous map $f: S^1 \to C$ with $\|\pi_2(\gamma(t)) - f(\theta(\gamma(t)))\| < \varepsilon_0$ for all $t$ and some $\varepsilon_0 > 0$, we have $E_{\cap}(\pi_2, \gamma) > 0$.
+    \item[(i)] For any continuous $\pi_2: \M \to \R^2$ such that there exists a simple closed curve $C \subset \R^2$ and a continuous map $f: S^1 \to C$ with $\|\pi_2(\gamma(t)) - f(\theta(\gamma(t)))\| < \varepsilon_0$ for all $t$ and some fixed $\varepsilon_0 > 0$, we have $E_{\cap}(\pi_2, \gamma) > 0$.
     \item[(ii)] There exists a continuous $\pi_3: \M \to \R^3$ such that $E_{\cap}(\pi_3, \gamma) = 0$.
 \end{enumerate}
 \end{theorem}
@@ -171,7 +171,7 @@ For any $t_1 \neq t_2$: if $\tau(t_1) \neq \tau(t_2)$, the third coordinates dif
 
 Therefore $\pi_3 \circ \gamma$ is injective, and $E_{\cap}(\pi_3, \gamma) = 0$.
 
-This construction is an instance of the general principle that an $m$-dimensional manifold generically embeds in $\R^{2m+1}$ \citep{whitney1936manifolds}. For our 1-dimensional trajectory with the constraint of preserving the cyclic structure, $k = 3 = 2(1) + 1$ is indeed the minimal safe dimension.
+This construction is consistent with Whitney's result that an $m$-dimensional manifold generically embeds in $\R^{2m+1}$ \citep{whitney1936manifolds}. For our 1-dimensional trajectory with the constraint of preserving the cyclic structure, $k = 3 = 2(1) + 1$ is indeed the minimal dimension.
 \end{proof}
 
 \subsection{Information-Geometric Interpretation}
@@ -225,7 +225,7 @@ Figure~\ref{fig:fisher} demonstrates the information-geometric interpretation. W
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{figures/fig2_fisher_rank.pdf}
-    \caption{Information geometry of dimensional collapse. (A) Covariance spectrum for $k=3$ vs $k=2$ embeddings---the third eigenvalue is lost in projection. (B) Mean squared error in reconstructing meta-time from the embedded coordinates: reconstruction fails for $k \leq 2$ but succeeds for $k = 3$. (C) Participation ratio (effective dimension) as a function of ambient dimension, showing the critical threshold at $k=3$.}
+    \caption{Information geometry of dimensional collapse. (A) Covariance spectrum for $k=3$ vs $k=2$ embeddings---the third eigenvalue is lost in projection. (B) Mean squared error in reconstructing meta-time from the embedded coordinates: reconstruction fails for $k \leq 2$ but succeeds for $k = 3$; shaded regions indicate regimes where $\tau$ is effectively non-identifiable (red) vs.\ identifiable (green). (C) Participation ratio (effective dimension) as a function of ambient dimension, showing the critical threshold at $k=3$.}
     \label{fig:fisher}
 \end{figure}
 
@@ -245,7 +245,7 @@ Figure~\ref{fig:cycles} shows that the result generalizes to arbitrary directed 
 Our results formalize a fundamental dichotomy in information processing:
 
 \begin{itemize}
-    \item \textbf{Categorical regime ($k \leq 2$):} Self-intersections are structurally unavoidable for cyclic processes with meta-time, forcing the system to treat temporally distinct states as equivalent. This naturally produces discrete categories and symbolic representations.
+    \item \textbf{Categorical regime ($k \leq 2$):} Self-intersections are structurally unavoidable for cyclic processes with meta-time, forcing the system to treat temporally distinct states as equivalent. This naturally encourages discrete categories and symbolic representations.
 
     \item \textbf{Continuous regime ($k \geq 3$):} Self-intersection-free embeddings exist, allowing the system to maintain temporal distinctness and represent processes rather than just states.
 \end{itemize}
