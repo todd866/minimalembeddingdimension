@@ -1,0 +1,302 @@
+\documentclass[12pt]{article}
+
+% Information Geometry (Springer) formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% Custom commands
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\pr}{\text{PR}}
+
+\title{Minimal Embedding Dimension for Self-Intersection-Free \\
+Recurrent Processes on Statistical Manifolds}
+
+\author{Ian Todd\\
+Sydney Medical School, University of Sydney\\
+\texttt{itod2305@uni.sydney.edu.au}}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We study the problem of embedding recurrent processes on statistical manifolds into Euclidean spaces of minimal dimension while preserving temporal distinctness. A \emph{self-intersection} occurs when two temporally distinct points of a trajectory are mapped to the same point in the embedding space. We show that for a class of cyclic processes with strictly monotone meta-time---including recurrent neural dynamics, biological oscillators, and symbolic state transitions---any continuous embedding into $\R^2$ that preserves the cyclic structure necessarily produces self-intersections, whereas self-intersection-free embeddings into $\R^3$ always exist. This establishes $k=3$ as a critical dimension threshold for these processes: $k \leq 2$ forces categorical discretization through unavoidable state conflation, while $k \geq 3$ preserves the continuous structure of temporal dynamics. We interpret this result in terms of metric degeneracy under dimensional collapse: the Fisher information metric loses rank when the meta-time coordinate is projected out.
+\end{abstract}
+
+\noindent\textbf{Keywords:} information geometry, dimensional reduction, statistical manifolds, embedding dimension, recurrent dynamics
+
+\section{Introduction}
+
+Information geometry provides a natural framework for studying inference and decision-making, endowing families of probability distributions with Riemannian structure via the Fisher information metric \citep{amari2016information,rao1945information}. In this framework, learning and reasoning correspond to trajectories on statistical manifolds, and the geometry of these manifolds constrains what inferences are possible.
+
+A fundamental question arises when we consider \emph{dimensional collapse}: what happens when a high-dimensional statistical manifold is projected onto a lower-dimensional subspace? This situation is ubiquitous in practice---from rate-distortion theory and the information bottleneck \citep{tishby2000information} to neural network compression and biological information processing \citep{gallego2017neural}.
+
+In this paper, we focus on a specific aspect of dimensional collapse: the emergence of \emph{self-intersections} between temporally distinct states. When a trajectory $\gamma(t)$ on a statistical manifold $\M$ is projected to a lower-dimensional space via a map $\pi_k: \M \to \R^k$, distinct times $t_1 \neq t_2$ may be mapped to the same point: $\pi_k(\gamma(t_1)) = \pi_k(\gamma(t_2))$. Such self-intersections destroy temporal information and force the system into a discrete, categorical regime.
+
+The question of minimal embedding dimension has a rich history in differential topology, beginning with Whitney's embedding theorem \citep{whitney1936manifolds}, which establishes that any smooth $n$-manifold can be embedded in $\R^{2n}$. For dynamical systems, Takens' embedding theorem \citep{takens1981detecting} provides conditions under which time-delay embeddings reconstruct attractor geometry. Our contribution is to apply these ideas in the information-geometric setting, asking specifically: what is the minimal dimension required to embed \emph{recurrent processes with monotone meta-time} without self-intersection?
+
+Our main results establish that:
+\begin{enumerate}
+    \item For cyclic processes with monotone meta-time, self-intersections are structurally unavoidable in $\R^2$ when the cyclic structure is preserved.
+    \item Self-intersection-free embeddings into $\R^3$ always exist for these processes.
+    \item The dimension $k = 3$ is therefore a \emph{critical threshold} separating categorical (self-intersection-tolerant) from continuous (self-intersection-free) representations.
+\end{enumerate}
+
+This result connects to classical dynamical systems theory: the Poincar\'e-Bendixson theorem \citep{guckenheimer2013nonlinear} states that continuous flows in $\R^2$ cannot exhibit chaotic behavior---only fixed points and limit cycles are possible. Our work provides an information-geometric analog: $k=2$ constrains representable dynamics to categorical structures, while $k \geq 3$ permits richer process-oriented dynamics.
+
+\section{Preliminaries}
+
+\subsection{Statistical Manifolds and the Fisher Metric}
+
+Let $\M = \{p_\theta : \theta \in \Theta\}$ be a parametric family of probability distributions on a sample space $\mathcal{X}$, where $\Theta \subseteq \R^n$ is an open subset. Under regularity conditions, $\M$ carries the structure of a Riemannian manifold with the Fisher information metric \citep{amari2000methods,fisher1925theory}:
+\begin{equation}
+    g_{ij}(\theta) = \mathbb{E}_{p_\theta}\left[\frac{\partial \log p_\theta}{\partial \theta^i} \frac{\partial \log p_\theta}{\partial \theta^j}\right].
+\end{equation}
+
+The Fisher metric captures the local distinguishability of nearby distributions: the geodesic distance between $p_\theta$ and $p_{\theta + d\theta}$ measures how statistically distinguishable they are.
+
+\subsection{Dimensional Collapse Maps}
+
+\begin{definition}[Collapse Map]
+A \emph{dimensional collapse map} is a smooth map $\pi_k: \M \to \R^k$ where $k < \dim(\M)$. The \emph{accessible information geometry} on $\R^k$ is the pushforward of the Fisher metric under $\pi_k$.
+\end{definition}
+
+When $k < \dim(\M)$, the accessible metric generically has rank less than $\dim(\M)$: some directions in parameter space become indistinguishable after projection. This phenomenon is closely related to singularities in statistical learning theory \citep{watanabe2009algebraic}.
+
+\subsection{Recurrent Processes and Trajectories}
+
+\begin{definition}[Recurrent Process]
+A \emph{recurrent process} on $\M$ is a continuous curve $\gamma: [0, T] \to \M$ representing the evolution of a belief state or inference trajectory.
+\end{definition}
+
+\begin{definition}[Cyclic Process with Monotone Meta-Time]\label{def:cyclic}
+A recurrent process $\gamma$ is \emph{cyclic with monotone meta-time} if:
+\begin{enumerate}
+    \item There exists a ``phase coordinate'' projection $\theta: \M \to S^1$ such that $\theta \circ \gamma$ covers the circle $n \geq 2$ times.
+    \item The process encodes a strictly monotone ``meta-time'' variable $\tau: [0,T] \to \R$ with $\tau'(t) > 0$ for all $t$.
+\end{enumerate}
+\end{definition}
+
+\begin{example}[Recurrent Systems]
+This class includes:
+\begin{itemize}
+    \item \textbf{Biological oscillators:} Neural limit cycles, circadian rhythms, cardiac pacemakers.
+    \item \textbf{Recurrent neural networks:} Hidden state trajectories in RNNs processing sequential data.
+    \item \textbf{Logical paradoxes:} The Liar's paradox (``This statement is false'') oscillates between TRUE and FALSE, with each cycle occurring at a distinct meta-time.
+\end{itemize}
+\end{example}
+
+\subsection{Self-Intersections}
+
+\begin{definition}[Self-Intersection]\label{def:intersection}
+Given a collapse map $\pi_k$ and a trajectory $\gamma$, a \emph{self-intersection} is a pair $(t_1, t_2)$ with $|t_1 - t_2| > \delta$ (for some threshold $\delta > 0$) such that:
+\begin{equation}
+    \|\pi_k(\gamma(t_1)) - \pi_k(\gamma(t_2))\| < \varepsilon
+\end{equation}
+for small $\varepsilon > 0$.
+\end{definition}
+
+Intuitively, a self-intersection occurs when temporally distant states are mapped to nearby points, destroying the ability to distinguish them.
+
+\begin{definition}[Self-Intersection Functional]
+The \emph{self-intersection functional} for a map $\pi_k$ and trajectory $\gamma$ is:
+\begin{equation}
+    E_{\cap}(\pi_k, \gamma) = \iint_{|t_1 - t_2| > \delta} \mathbf{1}\left[\|\pi_k(\gamma(t_1)) - \pi_k(\gamma(t_2))\| < \varepsilon\right] \, dt_1 \, dt_2.
+\end{equation}
+A map is \emph{self-intersection-free} if $E_{\cap}(\pi_k, \gamma) = 0$.
+\end{definition}
+
+\section{Main Results}
+
+\subsection{The Minimal Embedding Theorem}
+
+Our main result characterizes when self-intersection-free embeddings exist:
+
+\begin{theorem}[Minimal Embedding Dimension]\label{thm:main}
+Let $\gamma: [0, T] \to \M$ be a cyclic process with monotone meta-time as in Definition~\ref{def:cyclic}, with phase projection $\theta: \M \to S^1$ and meta-time $\tau$. Then:
+\begin{enumerate}
+    \item[(i)] For any continuous $\pi_2: \M \to \R^2$ such that there exists a simple closed curve $C \subset \R^2$ and a continuous map $f: S^1 \to C$ with $\|\pi_2(\gamma(t)) - f(\theta(\gamma(t)))\| < \varepsilon_0$ for all $t$ and some $\varepsilon_0 > 0$, we have $E_{\cap}(\pi_2, \gamma) > 0$.
+    \item[(ii)] There exists a continuous $\pi_3: \M \to \R^3$ such that $E_{\cap}(\pi_3, \gamma) = 0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof of (i)]
+The condition states that $\pi_2$ maps the trajectory to a tubular neighbourhood of a simple closed curve $C$ in $\R^2$, with the position along $C$ determined by the phase coordinate $\theta$.
+
+Since $\theta \circ \gamma$ covers $S^1$ at least $n \geq 2$ times and $\tau$ is strictly monotone, there exist times $t_1, t_2$ with:
+\begin{itemize}
+    \item $\theta(\gamma(t_1)) = \theta(\gamma(t_2))$ (same phase),
+    \item $\tau(t_1) \neq \tau(t_2)$ (different meta-times).
+\end{itemize}
+
+By the strict monotonicity of $\tau$, we have $|t_1 - t_2| > \delta$ for some $\delta > 0$ depending only on the period of the phase oscillation.
+
+By hypothesis, both $\pi_2(\gamma(t_1))$ and $\pi_2(\gamma(t_2))$ lie within $\varepsilon_0$ of the same point $f(\theta(\gamma(t_1))) = f(\theta(\gamma(t_2))) \in C$. Thus:
+\[
+\|\pi_2(\gamma(t_1)) - \pi_2(\gamma(t_2))\| \leq 2\varepsilon_0.
+\]
+
+Choosing $\varepsilon \geq 2\varepsilon_0$ in Definition~\ref{def:intersection}, we obtain $E_{\cap}(\pi_2, \gamma) > 0$.
+\end{proof}
+
+\begin{proof}[Proof of (ii)]
+Define $\pi_3: \M \to \R^3$ by:
+\begin{equation}
+    \pi_3(\gamma(t)) = \left(\cos(2\pi \theta(\gamma(t))), \sin(2\pi \theta(\gamma(t))), \frac{\tau(t)}{T}\right).
+\end{equation}
+
+This maps the trajectory to a helix in $\R^3$. The first two coordinates encode the phase on a circle, while the third coordinate is strictly monotone in $t$.
+
+For any $t_1 \neq t_2$: if $\tau(t_1) \neq \tau(t_2)$, the third coordinates differ, so $\pi_3(\gamma(t_1)) \neq \pi_3(\gamma(t_2))$. Since $\tau$ is strictly monotone, $t_1 \neq t_2$ implies $\tau(t_1) \neq \tau(t_2)$.
+
+Therefore $\pi_3 \circ \gamma$ is injective, and $E_{\cap}(\pi_3, \gamma) = 0$.
+
+This construction is an instance of the general principle that an $m$-dimensional manifold generically embeds in $\R^{2m+1}$ \citep{whitney1936manifolds}. For our 1-dimensional trajectory with the constraint of preserving the cyclic structure, $k = 3 = 2(1) + 1$ is indeed the minimal safe dimension.
+\end{proof}
+
+\subsection{Information-Geometric Interpretation}
+
+The self-intersection phenomenon has a natural interpretation in terms of metric degeneracy.
+
+\begin{proposition}[Fisher Metric Singularity]\label{prop:fisher}
+Consider a statistical manifold parametrized by $(\theta, \tau) \in S^1 \times \R$, where $\theta$ is the phase coordinate and $\tau$ is the meta-time. Assume the Fisher information matrix $G(\theta, \tau)$ has full rank 2 (both parameters are locally identifiable).
+
+Under a projection $\pi_2$ that discards the $\tau$ coordinate, the induced metric on the image has rank at most 1. Specifically, if we write the Jacobian of the projection as $J$, the induced metric is $\tilde{G} = J^T G J$, which has a null eigenvector in the $\tau$ direction. Consequently, the smallest eigenvalue of the induced metric tensor $\tilde{G}$ vanishes, as illustrated numerically in Figure~\ref{fig:fisher}A.
+
+This rank drop corresponds to \emph{non-identifiability}: distinct values of $\tau$ produce identical sufficient statistics after projection. Self-intersections are thus equivalent to singularities in the accessible information geometry---points where the induced metric becomes degenerate.
+
+This connects to the broader theory of singular statistical models \citep{watanabe2009algebraic}, where such degeneracies affect learning dynamics and generalization.
+\end{proposition}
+
+\subsection{Generalization to Directed Cycles}
+
+The result extends beyond simple oscillations to arbitrary recurrent structures:
+
+\begin{theorem}[General Cycle Theorem]\label{thm:cycles}
+Let $G = (V, E)$ be a directed graph containing a cycle of length $\geq 2$. Let $\gamma: [0,T] \to \M^{|V|}$ be a process that:
+\begin{enumerate}
+    \item Visits vertices in a pattern that traverses the cycle at least twice.
+    \item Encodes a strictly monotone meta-time $\tau$.
+\end{enumerate}
+Then the minimal embedding dimension for self-intersection-free representation is $k_{\min}(\gamma) \geq 3$.
+\end{theorem}
+
+\begin{proof}
+Embed the cycle $C_n \subset G$ as a simple closed curve in $\R^2$. The visitation pattern induces a phase coordinate $\theta: [0,T] \to S^1$ by mapping each position along the cycle to a point on the circle.
+
+By hypothesis, $\theta \circ \gamma$ covers $S^1$ at least twice while $\tau$ is strictly monotone. This reduces to the setup of Theorem~\ref{thm:main}, and the same argument applies.
+
+For graphs with nested cycles (multiple overlapping cycles), each subcycle independently forces $k_{\min} \geq 3$, so the bound holds for the entire graph.
+\end{proof}
+
+\section{Numerical Illustration}
+
+We illustrate the main theorem with explicit numerical examples. Figure~\ref{fig:intersection} shows the self-intersection problem: a cyclic process projected to 2D exhibits self-intersections (marked), while the same process embedded in 3D via a helix is self-intersection-free.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig1_collision_problem.pdf}
+    \caption{The self-intersection problem in dimensional collapse. (A) A helix in $\R^3$ representing a cyclic process with monotone meta-time---no self-intersections. (B) The same process projected to $\R^2$---self-intersections occur where the trajectory crosses itself (orange X marks). (C) Self-intersection count as a function of embedding dimension $k$: self-intersections persist for $k \leq 2$ but vanish for $k \geq 3$.}
+    \label{fig:intersection}
+\end{figure}
+
+Figure~\ref{fig:fisher} demonstrates the information-geometric interpretation. When the embedding dimension drops below 3, the meta-time parameter becomes non-identifiable, corresponding to a rank drop in the effective Fisher information.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_fisher_rank.pdf}
+    \caption{Information geometry of dimensional collapse. (A) Covariance spectrum for $k=3$ vs $k=2$ embeddings---the third eigenvalue is lost in projection. (B) Mean squared error in reconstructing meta-time from the embedded coordinates: reconstruction fails for $k \leq 2$ but succeeds for $k = 3$. (C) Participation ratio (effective dimension) as a function of ambient dimension, showing the critical threshold at $k=3$.}
+    \label{fig:fisher}
+\end{figure}
+
+Figure~\ref{fig:cycles} shows that the result generalizes to arbitrary directed cycles, not just simple 2-cycles.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_general_cycles.pdf}
+    \caption{Generalization to directed cycles. (A) A 2-cycle (e.g., TRUE $\leftrightarrow$ FALSE oscillation) requires $k_{\min} = 3$. (B) A 3-cycle A $\to$ B $\to$ C $\to$ A also requires $k_{\min} = 3$. (C) More complex graphs with nested cycles similarly require $k \geq 3$ for self-intersection-free embedding.}
+    \label{fig:cycles}
+\end{figure}
+
+\section{Discussion}
+
+\subsection{Categorical vs.\ Continuous Representations}
+
+Our results formalize a fundamental dichotomy in information processing:
+
+\begin{itemize}
+    \item \textbf{Categorical regime ($k \leq 2$):} Self-intersections are structurally unavoidable for cyclic processes with meta-time, forcing the system to treat temporally distinct states as equivalent. This naturally produces discrete categories and symbolic representations.
+
+    \item \textbf{Continuous regime ($k \geq 3$):} Self-intersection-free embeddings exist, allowing the system to maintain temporal distinctness and represent processes rather than just states.
+\end{itemize}
+
+This dichotomy suggests that the emergence of discrete symbols from continuous dynamics may be geometrically inevitable under dimensional constraints.
+
+\subsection{Connection to Dynamical Systems}
+
+Our results resonate with classical results in dynamical systems theory, particularly the Poincar\'e-Bendixson theorem \citep{guckenheimer2013nonlinear}, which states that continuous flows in $\R^2$ cannot exhibit chaotic behavior---only fixed points and limit cycles are possible. In $\R^3$ and higher, strange attractors and complex recurrent behavior become possible.
+
+The parallel is suggestive: $k = 2$ naturally yields simple, categorical structure, while $k \geq 3$ \emph{can} support richer, process-oriented dynamics. Our contribution is to formalize this in an information-geometric setting.
+
+\subsection{Applications}
+
+While this paper focuses on the mathematical foundations, the results have potential applications in:
+
+\begin{itemize}
+    \item \textbf{Neural coding:} Understanding when neural representations must be discrete vs.\ continuous \citep{gallego2017neural}.
+    \item \textbf{Machine learning:} Characterizing bottleneck dimensions in autoencoders and information bottleneck methods.
+    \item \textbf{Cognitive science:} Formalizing the emergence of symbolic thought from continuous neural dynamics.
+\end{itemize}
+
+These applications are left for future work.
+
+\subsection{Open Questions}
+
+Several questions remain:
+
+\begin{enumerate}
+    \item What is the minimal embedding dimension for more complex process classes (e.g., knotted trajectories, braided multi-agent processes)?
+    \item Can the self-intersection functional be minimized continuously as $k$ varies, or are there discrete phase transitions?
+    \item What is the thermodynamic interpretation of the ``cost'' of maintaining $k \geq 3$ vs.\ accepting self-intersections at $k = 2$?
+\end{enumerate}
+
+\section{Conclusion}
+
+We have established that $k = 3$ is the minimal embedding dimension for self-intersection-free representation of cyclic processes with monotone meta-time on statistical manifolds. This result identifies a critical threshold in information geometry: below three dimensions, temporal information is necessarily lost when the cyclic structure is preserved, forcing categorical representations; at three dimensions and above, continuous processes can be faithfully represented.
+
+The proofs are elementary, relying on the topology of the circle and the definition of injectivity, combined with the classical Whitney embedding principle. Yet the result has implications for understanding when and why discrete structures emerge from continuous substrates.
+
+\section*{Statements and Declarations}
+
+\textbf{Funding:} No external funding was received for this research.
+
+\textbf{Competing Interests:} The author has no competing interests to declare.
+
+\textbf{Data Availability:} All code for reproducing figures is available at \url{https://github.com/todd866/minimalembeddingdimension}.
+
+\textbf{Use of AI Tools:} Large language models (Claude 4.5 Opus, Gemini 3 Pro, ChatGPT 5.1 Pro) were used to assist in the drafting of text and the generation of Python plotting code. The author bears full responsibility for the content of the work.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
