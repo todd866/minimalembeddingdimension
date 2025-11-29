@@ -60,7 +60,8 @@ def figure1_helix_vs_circle():
     """
     t, x, y, z = generate_helix(n_points=300, n_cycles=2)
 
-    fig = plt.figure(figsize=(10, 4))
+    fig = plt.figure(figsize=(12, 4))
+    plt.subplots_adjust(wspace=0.35)  # More space between panels
 
     # Panel A: 3D helix (collision-free)
     ax1 = fig.add_subplot(131, projection='3d')
