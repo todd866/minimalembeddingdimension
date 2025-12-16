@@ -40,7 +40,7 @@ Sydney Medical School, University of Sydney\\
 \maketitle
 
 \begin{abstract}
-We study the problem of embedding recurrent processes on statistical manifolds into Euclidean spaces of minimal dimension while preserving temporal distinctness. A \emph{self-intersection} occurs when two temporally distinct points of a trajectory are mapped to the same point in the embedding space. We show that for a class of cyclic processes with strictly monotone meta-time---including recurrent neural dynamics, biological oscillators, and symbolic state transitions---any continuous embedding into $\R^2$ that preserves the cyclic structure necessarily produces self-intersections, whereas self-intersection-free embeddings into $\R^3$ always exist. This establishes $k=3$ as a critical dimension threshold for this class of recurrent processes: $k \leq 2$ forces categorical discretization through unavoidable state conflation, while $k \geq 3$ preserves the continuous structure of temporal dynamics. We interpret this result in terms of metric degeneracy under dimensional collapse: the Fisher information metric loses rank when the meta-time coordinate is projected out.
+We study the problem of embedding recurrent processes on statistical manifolds into Euclidean spaces of minimal dimension while preserving temporal distinctness. A \emph{self-intersection} occurs when two temporally distinct points of a trajectory are mapped to the same point in the embedding space. We show that for a class of cyclic processes with strictly monotone meta-time---including recurrent neural dynamics, biological oscillators, and symbolic state transitions---any continuous \emph{phase-preserving} embedding into $\R^2$ (i.e., one that maps the cycle to a simple closed curve, with image depending only on phase and not on meta-time) necessarily produces self-intersections, whereas self-intersection-free embeddings into $\R^3$ always exist. This establishes $k=3$ as a critical dimension threshold for phase-preserving representations of recurrent processes: $k \leq 2$ forces categorical discretization through unavoidable state conflation, while $k \geq 3$ preserves the continuous structure of temporal dynamics. We interpret this result in terms of metric degeneracy under dimensional collapse: the Fisher information metric loses rank when the meta-time coordinate is projected out.
 \end{abstract}
 
 \noindent\textbf{Keywords:} information geometry, dimensional reduction, statistical manifolds, embedding dimension, recurrent dynamics
@@ -57,9 +57,9 @@ The question of minimal embedding dimension has a rich history in differential t
 
 Our main results establish that:
 \begin{enumerate}
-    \item For cyclic processes with monotone meta-time, self-intersections are structurally unavoidable in $\R^2$ when the cyclic structure is preserved.
+    \item For cyclic processes with monotone meta-time, self-intersections are structurally unavoidable in $\R^2$ under \emph{phase-preserving} embeddings---those that map the cycle to a simple closed curve with image depending only on phase, not on meta-time. (Embeddings that encode meta-time in the radial coordinate, such as spirals, can avoid self-intersections but violate this constraint.)
     \item Self-intersection-free embeddings into $\R^3$ always exist for these processes.
-    \item The dimension $k = 3$ is therefore a \emph{critical threshold} separating categorical (self-intersection-tolerant) from continuous (self-intersection-free) representations.
+    \item The dimension $k = 3$ is therefore a \emph{critical threshold} for phase-preserving representations: categorical below, continuous above.
 \end{enumerate}
 
 This result connects to classical dynamical systems theory: the Poincar\'e-Bendixson theorem \citep{guckenheimer2013nonlinear} states that continuous flows in $\R^2$ cannot exhibit chaotic behavior---only fixed points and limit cycles are possible. Our work provides an information-geometric analog: $k=2$ constrains representable dynamics to categorical structures, while $k \geq 3$ permits richer process-oriented dynamics.
@@ -116,12 +116,16 @@ embeds the trajectory into the cylinder $S^1 \times \R$, where:
     \item The $S^1$ factor encodes the cyclic phase coordinate $\theta$.
     \item The $\R$ factor encodes the strictly monotone meta-time $\tau$.
 \end{itemize}
-Since $\tau$ is strictly monotone, $\Phi$ is injective. The minimal embedding problem thus reduces to: \emph{what is the smallest $k$ such that $S^1 \times \R$ embeds in $\R^k$ without self-intersection when projected?}
+Since $\tau$ is strictly monotone, $\Phi$ is injective. The minimal embedding problem thus reduces to: \emph{what is the smallest $k$ such that this cylinder-structured trajectory admits a phase-preserving embedding into $\R^k$ without self-intersection?}
 \end{lemma}
 
 \begin{proof}
 Injectivity of $\Phi$ follows from strict monotonicity of $\tau$: if $\Phi(t_1) = \Phi(t_2)$, then $\tau(t_1) = \tau(t_2)$, which implies $t_1 = t_2$ by monotonicity.
 \end{proof}
+
+\begin{remark}[Topological Note]
+The cylinder $S^1 \times \R$ \emph{can} be embedded in $\R^2$---for example, as a spiral via $(\theta, \tau) \mapsto (e^\tau \cos\theta, e^\tau \sin\theta)$. The obstruction in Theorem~\ref{thm:main} arises not from the cylinder topology alone, but from the \emph{phase-preserving} constraint (Eq.~\ref{eq:phase-preserving}), which requires the image to depend only on phase $\theta$, effectively collapsing the cylinder fibers onto a circle. Spiral embeddings violate this constraint by encoding meta-time in the radial coordinate.
+\end{remark}
 
 \subsection{Self-Intersections and Injectivity}
 
@@ -157,23 +161,27 @@ Our main result characterizes when self-intersection-free embeddings exist:
 \begin{theorem}[Minimal Embedding Dimension]\label{thm:main}
 Let $\gamma: [0, T] \to \M$ be a cyclic process with monotone meta-time as in Definition~\ref{def:cyclic}, with phase projection $\theta: \M \to S^1$ and meta-time $\tau$. Then:
 \begin{enumerate}
-    \item[(i)] \textbf{(Non-existence in $\R^2$)} Any continuous $\pi_2: \M \to \R^2$ that preserves the cyclic structure---i.e., there exists a simple closed curve $C \subset \R^2$ and a homeomorphism $f: S^1 \to C$ such that $\pi_2(\gamma(t))$ lies in a tubular neighbourhood of $f(\theta(\gamma(t)))$---necessarily has self-intersections: $\pi_2 \circ \gamma$ is not injective.
+    \item[(i)] \textbf{(Non-existence in $\R^2$)} Any continuous \emph{phase-preserving} map $\pi_2: \M \to \R^2$---meaning there exists a simple closed curve $C \subset \R^2$ and a homeomorphism $f: S^1 \to C$ such that
+    \begin{equation}\label{eq:phase-preserving}
+        \pi_2(\gamma(t)) = f(\theta(\gamma(t)))
+    \end{equation}
+    for all $t$---necessarily has self-intersections: $\pi_2 \circ \gamma$ is not injective.
     \item[(ii)] \textbf{(Existence in $\R^3$)} There exists a continuous $\pi_3: \M \to \R^3$ such that $\pi_3 \circ \gamma$ is injective (self-intersection-free).
 \end{enumerate}
 \end{theorem}
 
+\begin{remark}[Why Phase-Preservation Matters]
+The phase-preserving condition \eqref{eq:phase-preserving} excludes embeddings that use ``hidden dimensions'' to encode meta-time. For instance, a spiral $(\cos\theta, \sin\theta, r(\tau))$ in $\R^3$ projected to $\R^2$ as $(r\cos\theta, r\sin\theta)$ avoids self-intersections by encoding $\tau$ in the radius---but this is \emph{not} phase-preserving, since the image point depends on $\tau$, not just $\theta$. The theorem says: if your 2D representation genuinely factors through phase alone, collisions are unavoidable.
+\end{remark}
+
 \begin{proof}[Proof of (i)]
-Let $\pi_2$ map the trajectory to a tubular neighbourhood of a simple closed curve $C \subset \R^2$, with position along $C$ determined by the phase coordinate $\theta$ via homeomorphism $f: S^1 \to C$.
+Since $\theta \circ \gamma$ covers $S^1$ at least $n \geq 2$ times and $\tau$ is strictly monotone, there exist distinct times $t_1 \neq t_2$ with $\theta(\gamma(t_1)) = \theta(\gamma(t_2))$ (same phase).
 
-Since $\theta \circ \gamma$ covers $S^1$ at least $n \geq 2$ times and $\tau$ is strictly monotone, there exist distinct times $t_1 \neq t_2$ with:
-\begin{itemize}
-    \item $\theta(\gamma(t_1)) = \theta(\gamma(t_2))$ (same phase),
-    \item $\tau(t_1) \neq \tau(t_2)$ (different meta-times, hence $t_1 \neq t_2$).
-\end{itemize}
-
-By hypothesis, $\pi_2(\gamma(t_1))$ and $\pi_2(\gamma(t_2))$ both lie near $f(\theta(\gamma(t_1))) = f(\theta(\gamma(t_2))) \in C$. In the limit where the tubular neighbourhood shrinks to $C$ itself, we have $\pi_2(\gamma(t_1)) = \pi_2(\gamma(t_2))$, violating injectivity.
-
-More precisely: if we require $\pi_2 \circ \gamma$ to factor through the phase as $\pi_2(\gamma(t)) = f(\theta(\gamma(t)))$, then same phase implies same image, so distinct times $t_1, t_2$ with $\theta(\gamma(t_1)) = \theta(\gamma(t_2))$ satisfy $\pi_2(\gamma(t_1)) = \pi_2(\gamma(t_2))$, and $\pi_2 \circ \gamma$ is not injective.
+By the phase-preserving condition \eqref{eq:phase-preserving}:
+\[
+\pi_2(\gamma(t_1)) = f(\theta(\gamma(t_1))) = f(\theta(\gamma(t_2))) = \pi_2(\gamma(t_2)).
+\]
+Thus $t_1 \neq t_2$ but $\pi_2(\gamma(t_1)) = \pi_2(\gamma(t_2))$, so $\pi_2 \circ \gamma$ is not injective.
 \end{proof}
 
 \begin{proof}[Proof of (ii)]
@@ -186,7 +194,7 @@ This maps the trajectory to a helix in $\R^3$: the first two coordinates encode 
 
 \textbf{Injectivity:} For any $t_1 \neq t_2$, the strict monotonicity of $\tau$ implies $\tau(t_1) \neq \tau(t_2)$, so the third coordinates of $\pi_3(\gamma(t_1))$ and $\pi_3(\gamma(t_2))$ differ. Therefore $\pi_3(\gamma(t_1)) \neq \pi_3(\gamma(t_2))$, and $\pi_3 \circ \gamma$ is injective.
 
-This construction is consistent with Whitney's embedding theorem \citep{whitney1936manifolds}: a generic $m$-manifold embeds in $\R^{2m+1}$. For our constrained setting (1-dimensional curve with cyclic structure preserved), $k = 3 = 2(1) + 1$ is precisely the minimal dimension.
+\textbf{Minimality within the phase-preserving class:} By Lemma~\ref{lem:cylinder}, the trajectory has intrinsic cylinder structure $S^1 \times \R$. A phase-preserving embedding (Eq.~\ref{eq:phase-preserving}) constrains the image of the $S^1$ factor to a simple closed curve $C$ whose points depend only on phase. The full trajectory then lives in a tubular neighbourhood of $C$, and preserving injectivity requires at least one transverse dimension for the $\R$ factor (meta-time). Thus $k = 3$ is minimal \emph{among phase-preserving embeddings}: two dimensions to accommodate the closed curve, one for the monotone coordinate. (Without phase-preservation, spiral embeddings into $\R^2$ are possible; see Remark after Lemma~\ref{lem:cylinder}.)
 \end{proof}
 
 \subsection{Information-Geometric Interpretation}
@@ -201,6 +209,8 @@ Under a projection $\pi_2$ that discards the $\tau$ coordinate, the induced metr
 This rank drop corresponds to \emph{non-identifiability}: distinct values of $\tau$ produce identical sufficient statistics after projection. Self-intersections are thus equivalent to singularities in the accessible information geometry---points where the induced metric becomes degenerate.
 
 This connects to the broader theory of singular statistical models \citep{watanabe2009algebraic}, where such degeneracies affect learning dynamics and generalization.
+
+\textbf{Numerical proxy:} In Figure~\ref{fig:fisher}, we illustrate the rank drop using eigenvalues of the empirical covariance matrix as a proxy for the Fisher metric spectrum. This is appropriate for our toy model where the covariance structure tracks the geometric structure; in general statistical settings, the Fisher metric must be computed from the model likelihood.
 \end{proposition}
 
 \begin{example}[Gaussian Family with Cyclic Inference]\label{ex:gaussian}
@@ -219,7 +229,7 @@ where $P$ is the oscillation period, $\sigma_0$ is initial uncertainty, and $\la
 
 This defines a trajectory $\gamma(t) = (\mu(t), \sigma(t))$ on $\M$. The phase coordinate is $\theta(t) = 2\pi t / P \mod 2\pi$, and the meta-time is $\tau(t) = t$ (or equivalently, $\tau = -\log(\sigma/\sigma_0)/\lambda$).
 
-\textbf{Projection to $\R^2$:} If we project via $\pi_2(\mu, \sigma) = (\mu, 0)$ (discarding $\sigma$), the trajectory collapses to $[-A, A]$. Distinct times with the same $\mu$ (i.e., same phase $\theta$) become identical, producing self-intersections. The Fisher metric degenerates: variations in $\sigma$ become undetectable.
+\textbf{Projection to $\R^2$:} If we project via $\pi_2(\mu, \sigma) = (\mu, 0)$ (discarding $\sigma$), the trajectory collapses to $[-A, A]$. Distinct times with the same $\mu$ (i.e., same phase $\theta$) become identical, producing self-intersections. The induced metric has a null direction: the projection Jacobian kills the $\sigma$ (equivalently, $\tau$) direction. Note that this rank drop is not due to the intrinsic Fisher metric becoming singular as $\sigma \to 0$; it is due to the projection discarding $\sigma$ entirely, so variations in meta-time become undetectable regardless of $\sigma$.
 
 \textbf{Embedding in $\R^3$:} The helix embedding $\pi_3(\gamma(t)) = (\cos\theta(t), \sin\theta(t), \tau(t))$ preserves both the cyclic structure and the meta-time, yielding an injective map.
 
@@ -254,7 +264,7 @@ We illustrate the main theorem with explicit numerical examples. Figure~\ref{fig
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{figures/fig1_collision_problem.pdf}
-    \caption{The self-intersection problem in dimensional collapse. (A) A helix in $\R^3$ representing a cyclic process with monotone meta-time---no self-intersections. (B) The same process projected to $\R^2$---self-intersections occur where the trajectory crosses itself (orange X marks). (C) Self-intersection count as a function of embedding dimension $k$: self-intersections persist for $k \leq 2$ but vanish for $k \geq 3$.}
+    \caption{The self-intersection problem in dimensional collapse. (A) A helix in $\R^3$ representing a cyclic process with monotone meta-time---no self-intersections. (B) The same process projected to $\R^2$---self-intersections occur where the trajectory crosses itself (orange X marks). (C) Self-intersection count as a function of embedding dimension $k$: self-intersections persist for $k \leq 2$ but vanish for $k \geq 3$. Collision counts depend on the proximity threshold $\varepsilon$; in the phase-preserving case shown here, collisions persist for all sufficiently small $\varepsilon$ once the cycle repeats.}
     \label{fig:intersection}
 \end{figure}
 
@@ -280,15 +290,15 @@ Figure~\ref{fig:cycles} shows that the result generalizes to arbitrary directed 
 
 \subsection{Categorical vs.\ Continuous Representations}
 
-Our results formalize a fundamental dichotomy in information processing:
+Our results formalize a fundamental dichotomy in information processing, arising from the tension between \emph{recurrence} (repeating states) and \emph{progress} (monotone meta-time):
 
 \begin{itemize}
-    \item \textbf{Categorical regime ($k \leq 2$):} Self-intersections are structurally unavoidable for cyclic processes with meta-time, forcing the system to treat temporally distinct states as equivalent. This naturally encourages discrete categories and symbolic representations.
+    \item \textbf{Categorical regime ($k \leq 2$):} When a recurrent process is constrained to a bounded region in $\R^2$ (a limit cycle rather than an unbounded spiral), self-intersections become unavoidable. The phase-preserving constraint forces dimensional collapse of the trajectory cylinder $S^1 \times \R$ onto a circle $S^1$, obliterating the meta-time distinction. The system can only represent ``what'' state it is in, not ``when'' it occurred---a geometric bottleneck that naturally engenders discrete, symbolic representations.
 
-    \item \textbf{Continuous regime ($k \geq 3$):} Self-intersection-free embeddings exist, allowing the system to maintain temporal distinctness and represent processes rather than just states.
+    \item \textbf{Continuous regime ($k \geq 3$):} The extra degree of freedom allows the trajectory to spiral helically. The system can maintain strict recurrence in the projected phase plane $(x_1, x_2)$ while encoding progress in the transverse dimension $(x_3)$. This permits representations of processes that are simultaneously cyclic and temporally distinct.
 \end{itemize}
 
-This dichotomy suggests that the emergence of discrete symbols from continuous dynamics may be geometrically inevitable under dimensional constraints.
+This dichotomy suggests that the emergence of discrete symbols from continuous dynamics may be geometrically inevitable under dimensional constraints, particularly when the system is spatially confined (as in homeostatic biological systems that cannot drift unboundedly).
 
 \begin{corollary}[Discretization as Quotient]\label{cor:quotient}
 For a cyclic process with monotone meta-time, any $k \leq 2$ embedding that preserves the cyclic structure induces a quotient map on the trajectory. Specifically, let $\sim$ denote the equivalence relation on $[0,T]$ defined by:
@@ -297,7 +307,7 @@ t_1 \sim t_2 \iff \pi_k(\gamma(t_1)) = \pi_k(\gamma(t_2)).
 \]
 Then for $k \leq 2$, the equivalence classes $[t] = \{s : s \sim t\}$ are non-trivial (contain more than one element), and the induced map $\bar{\gamma}: [0,T]/{\sim} \to \R^k$ is well-defined.
 
-The quotient space $[0,T]/{\sim}$ is the \emph{effective state space} of the collapsed representation. For cyclic processes, this quotient is homeomorphic to $S^1$: the meta-time information is ``quotiented out,'' leaving only the phase. This is the sense in which dimensional collapse \emph{forces} categorical (discrete-time) structure.
+The quotient space $[0,T]/{\sim}$ is the \emph{effective state space} of the collapsed representation. For cyclic processes, this quotient is homeomorphic to $S^1$: the meta-time information is ``quotiented out,'' leaving only the phase. Topologically, this corresponds to the bundle projection $\pi: S^1 \times \R \to S^1$ that fibers the trajectory over the cycle; the ``discretization'' is precisely the loss of the fiber coordinate. This is the sense in which dimensional collapse \emph{forces} categorical (discrete-time) structure.
 \end{corollary}
 
 \subsection{Connection to Dynamical Systems}
