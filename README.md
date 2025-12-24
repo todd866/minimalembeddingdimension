@@ -1,33 +1,66 @@
 # Minimal Embedding Dimension for Self-Intersection-Free Recurrent Processes
 
-Code and figures for the paper:
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Minimal Embedding Dimension for Self-Intersection-Free Recurrent Processes on Statistical Manifolds**
+**k = 3 is the critical threshold for representing cyclic processes without temporal conflation.**
 
-Ian Todd, University of Sydney
-
-Submitted to *Information Geometry* (Springer)
+Submitted to **Information Geometry** (Springer) — INGE-D-25-00099, under review.
 
 ## Abstract
 
-We establish that k=3 is the minimal embedding dimension for self-intersection-free representation of cyclic processes with monotone meta-time on statistical manifolds. This identifies a critical threshold in information geometry: k≤2 forces categorical representations through unavoidable state conflation, while k≥3 preserves continuous temporal dynamics.
+We establish that k=3 is the minimal embedding dimension for self-intersection-free representation of cyclic processes with monotone meta-time on statistical manifolds. For *phase-preserving* embeddings (where the image depends only on phase φ, not meta-time τ), k ≤ 2 forces categorical representations through unavoidable state conflation, while k ≥ 3 preserves continuous temporal dynamics.
 
-## Contents
+## Key Results
 
-- `generate_figures.py` - Python script to reproduce all figures
-- `dimensional_collapse.tex` - LaTeX source (submitted version)
-- `references.bib` - Bibliography
-- `figures/` - Generated figure PDFs
+1. **Non-existence in ℝ²**: Any phase-preserving map π₂: K → ℝ² (i.e., π₂|_K = f ∘ φ|_K) necessarily has self-intersections.
 
-### Revisions folder
+2. **Existence in ℝ³**: The canonical helix embedding π₃(γ(t)) = (cos(2πφ), sin(2πφ), τ/T) is injective.
 
-The `revisions/` directory contains post-submission refinements addressing potential reviewer concerns:
+3. **Discretization as Quotient**: For k ≤ 2, the equivalence classes form a quotient homeomorphic to S¹—the meta-time information is "quotiented out."
 
-- **Topological clarification:** The original theorem statement could be read as claiming the cylinder $S^1 \times \mathbb{R}$ cannot embed in $\mathbb{R}^2$ (it can, as a spiral). The revision explicitly restricts to *phase-preserving* embeddings—those where the image depends only on phase, not meta-time—which is the physically meaningful constraint for limit-cycle systems.
-- **Tightened proofs:** Minimality claim now explicitly scoped to "within the phase-preserving class."
-- **Fisher metric clarification:** Distinguished intrinsic metric behavior from projection-induced rank loss.
+## Companion Paper
 
-The root-level files reproduce the submitted PDF exactly. The `revisions/` folder contains work-in-progress improvements for potential revision requests.
+This paper forms a two-paper program with:
+
+**[Quotient Geometry of Statistical Manifolds Under Dimensional Collapse](https://github.com/todd866/code-emergence)** (in preparation)
+
+- **This paper**: establishes the specific k = 3 threshold for cyclic processes with monotone meta-time
+- **Companion paper**: provides the general quotient-geometric framework (fiber structure, metric descent, covering numbers) that makes this phenomenon inevitable
+
+The papers share notation: φ for phase coordinate, τ for meta-time, V = ker(dφ) for vertical distribution (meta-time directions), H = V^⊥ for horizontal.
+
+## Repository Structure
+
+```
+├── dimensional_collapse.tex     # Submitted manuscript
+├── dimensional_collapse.pdf     # Compiled PDF
+├── generate_figures.py          # Figure generation script
+├── figures/                     # Generated figures
+├── references.bib               # Bibliography
+└── revisions/
+    └── dimensional_collapse_r1.tex  # R1 revision (in progress)
+```
+
+### Revisions
+
+The `revisions/` directory contains refinements addressing cross-paper consistency:
+
+- **Phase coordinate renamed**: θ → φ (avoiding conflict with parameter θ in p_θ)
+- **Domain clarified**: π_k defined on trajectory K = γ([0,T]), not all of M
+- **Phase-preserving simplified**: Now "factors through phase" (π₂|_K = f ∘ φ|_K)
+- **Fisher metric clarified**: Coordinate-free statement of rank drop; connects to companion paper's fiber structure
+- **Bridge remark added**: Explicit connection to quotient geometry (V, H, fiber foliation)
+
+## Figures
+
+```bash
+python generate_figures.py
+```
+
+Generates:
+- `fig1_collision_problem.pdf` — Self-intersection visualization (helix vs. projection)
+- `fig2_fisher_rank.pdf` — Information geometry of rank drop
+- `fig3_general_cycles.pdf` — Generalization to directed cycles
 
 ## Requirements
 
@@ -37,17 +70,18 @@ matplotlib
 scipy
 ```
 
-## Usage
+## Citation
 
-```bash
-python generate_figures.py
+```bibtex
+@article{todd2025minimal,
+  title={Minimal Embedding Dimension for Self-Intersection-Free Recurrent Processes on Statistical Manifolds},
+  author={Todd, Ian},
+  journal={Information Geometry},
+  year={2025},
+  note={Under review, INGE-D-25-00099}
+}
 ```
-
-This generates:
-- `figures/fig1_collision_problem.pdf` - Self-intersection visualization
-- `figures/fig2_fisher_rank.pdf` - Information geometry analysis
-- `figures/fig3_general_cycles.pdf` - Generalization to directed cycles
 
 ## License
 
-MIT
+MIT License
