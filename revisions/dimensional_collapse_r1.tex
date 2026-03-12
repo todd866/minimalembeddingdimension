@@ -49,11 +49,11 @@ We study the problem of embedding recurrent processes on statistical manifolds i
 
 Information geometry provides a natural framework for studying inference and decision-making, endowing families of probability distributions with Riemannian structure via the Fisher information metric \citep{amari2016information,rao1945information}. In this framework, learning and reasoning correspond to trajectories on statistical manifolds, and the geometry of these manifolds constrains what inferences are possible.
 
-A fundamental question arises when we consider \emph{dimensional collapse}: what happens when a high-dimensional statistical manifold is projected onto a lower-dimensional subspace? This situation is ubiquitous in practice---from rate-distortion theory and the information bottleneck \citep{tishby2000information} to neural network compression and biological information processing \citep{gallego2017neural}.
+A fundamental question arises when we consider \emph{dimensional collapse}: what happens when a high-dimensional statistical manifold is projected onto a lower-dimensional subspace? The notion of dimensional collapse has geometric precedent in Cheeger-Gromov collapsing theory \citep{cheeger1986collapsing}, where Riemannian manifolds collapse under curvature bounds; our notion differs in that collapse occurs through projection rather than diameter shrinkage. This situation is ubiquitous in practice---from rate-distortion theory \citep{shannon1959coding} and the information bottleneck \citep{tishby2000information} to low-dimensional neural representations \citep{gallego2017neural}.
 
 In this paper, we focus on a specific aspect of dimensional collapse: the emergence of \emph{self-intersections} between temporally distinct states. When a trajectory $\gamma(t)$ on a statistical manifold $\M$ is projected to a lower-dimensional space via a map $\pi_k: \M \to \R^k$, distinct times $t_1 \neq t_2$ may be mapped to the same point: $\pi_k(\gamma(t_1)) = \pi_k(\gamma(t_2))$. Such self-intersections destroy temporal information and force the system into a discrete, categorical regime.
 
-The question of minimal embedding dimension has a rich history in differential topology, beginning with Whitney's embedding theorem \citep{whitney1936manifolds}, which establishes that any smooth $n$-manifold can be embedded in $\R^{2n}$. For dynamical systems, Takens' embedding theorem \citep{takens1981detecting} provides conditions under which time-delay embeddings reconstruct attractor geometry. Our contribution is to apply these ideas in the information-geometric setting, asking specifically: what is the minimal dimension required to embed \emph{recurrent processes with monotone meta-time} without self-intersection?
+The question of minimal embedding dimension has a rich history in differential topology, beginning with Whitney's embedding theorem: Whitney \citep{whitney1936manifolds} showed that any smooth $n$-manifold can be embedded in $\R^{2n+1}$, and later \citep{whitney1944selfintersections} sharpened this to $\R^{2n}$. For dynamical systems, Takens' embedding theorem \citep{takens1981detecting} provides conditions under which time-delay embeddings reconstruct attractor geometry. Our contribution is to apply these ideas in the information-geometric setting, asking specifically: what is the minimal dimension required to embed \emph{recurrent processes with monotone meta-time} without self-intersection?
 
 Our main results establish that:
 \begin{enumerate}
@@ -64,9 +64,9 @@ Our main results establish that:
 
 \textbf{Why phase-preservation is not arbitrary.} The phase-preserving constraint arises naturally in several settings: (i) when a 2D representation is required to depict the \emph{cyclic structure} as a closed curve (e.g., limit cycles, phase diagrams, cyclic state machines); (ii) when the representation must be equivariant or invariant under meta-time reparametrization---so that ``where in the cycle'' is displayed, but ``which traversal'' is not; (iii) when bounded spatial representations are required, ruling out unbounded spirals. The theorem's content is that under these natural constraints, self-intersections are unavoidable. The proof is elementary, but the result identifies a sharp geometric threshold with implications for when discrete/symbolic representations must emerge from continuous dynamics.
 
-This result connects to classical dynamical systems theory: the Poincar\'e-Bendixson theorem \citep{guckenheimer2013nonlinear} states that continuous flows in $\R^2$ cannot exhibit chaotic behavior---only fixed points and limit cycles are possible. Our work provides an information-geometric analog: $k=2$ constrains representable dynamics to categorical structures, while $k \geq 3$ permits richer process-oriented dynamics.
+This result connects to classical dynamical systems theory: the Poincar\'e-Bendixson theorem \citep{poincare1881memoire,bendixson1901courbes,guckenheimer1983nonlinear} states that continuous flows in $\R^2$ cannot exhibit chaotic behavior---only fixed points and limit cycles are possible. Our work provides an information-geometric analog: $k=2$ constrains representable dynamics to categorical structures, while $k \geq 3$ permits richer process-oriented dynamics.
 
-\textbf{Companion paper.} This paper establishes a specific phenomenon; a companion paper \citep{todd2025quotient} develops the general quotient-geometric framework that makes the phenomenon inevitable. In that framework, collapse maps induce vertical/horizontal distributions ($\mathcal{V} = \ker(d\pi)$, $\mathcal{H} = \mathcal{V}^\perp$), the Fisher metric descends to a quotient under bundle-like conditions, and covering numbers $N(\varepsilon) \sim \varepsilon^{-r}$ quantify distinguishability at rank $r$. The $k = 3$ threshold established here corresponds to a transition from scaling exponent $r = 1$ (phase-only) to $r = 2$ (phase-and-time)---see Corollary~15 and Remark~16 for the explicit connection.
+\textbf{Companion paper.} This paper establishes a specific phenomenon; a companion paper \citep{todd2025quotient} develops the general quotient-geometric framework that makes the phenomenon inevitable. In that framework, collapse maps induce vertical/horizontal distributions ($\mathcal{V} = \ker(d\pi)$, $\mathcal{H} = \mathcal{V}^\perp$), the Fisher metric descends to a quotient under bundle-like conditions, and covering numbers $N(\varepsilon) \sim \varepsilon^{-r}$ quantify distinguishability at rank $r$. The $k = 3$ threshold established here corresponds to a transition from scaling exponent $r = 1$ (phase-only) to $r = 2$ (phase-and-time)---see the companion paper for the explicit connection.
 
 \section{Preliminaries}
 
@@ -85,7 +85,7 @@ The Fisher metric captures the local distinguishability of nearby distributions:
 A \emph{dimensional collapse map} is a smooth map $\pi_k: \M \to \R^k$ where $k < \dim(\M)$. Given $\pi_k$, the \emph{observable} (or \emph{effective}) Fisher information is obtained by restricting attention to directions detectable through $d\pi_k$. In general this yields a rank-deficient semi-metric on $\M$; a full quotient metric on the image space $\M/{\sim_\pi}$ requires additional regularity conditions (see the companion paper for the general quotient-geometric framework).
 \end{definition}
 
-When $k < \dim(\M)$, the observable information generically has rank less than $\dim(\M)$: some directions in parameter space become indistinguishable after projection. This phenomenon is closely related to singularities in statistical learning theory \citep{watanabe2009algebraic}.
+When $k < \dim(\M)$, the observable information generically has rank less than $\dim(\M)$: some directions in parameter space become indistinguishable after projection. Collapse maps relate to the theory of sufficient statistics in information geometry \citep{ay2017information}, where projections that preserve Fisher information define sufficient statistics; our collapse maps are precisely those that fail this criterion. This phenomenon is also connected to singularities in statistical learning theory \citep{watanabe2009algebraic}.
 
 \subsection{Recurrent Processes and Trajectories}
 
@@ -217,7 +217,7 @@ Let $\pi: (\varphi, \tau) \mapsto \varphi$ be the projection that discards the $
 
 This rank drop corresponds to \emph{non-identifiability}: distinct values of $\tau$ produce identical observable distributions after projection. Self-intersections are thus equivalent to singularities in the accessible information geometry---precisely the fiber structure described in the companion paper on quotient geometry.
 
-This connects to the broader theory of singular statistical models \citep{watanabe2009algebraic}, where such degeneracies affect learning dynamics and generalization.
+This is reminiscent of the broader theory of singular statistical models \citep{watanabe2009algebraic}: in Watanabe's framework, rank-drop corresponds to a non-regular statistical model where the Fisher metric degenerates at certain parameter values, affecting learning dynamics and generalization.
 
 \textbf{Numerical illustration:} In Figure~\ref{fig:fisher}, we illustrate the rank drop using eigenvalues of the empirical covariance matrix as a proxy for the Fisher metric spectrum.
 \end{proposition}
@@ -325,7 +325,7 @@ In the phase-preserving case $\pi_2|_K = f \circ \varphi|_K$, the equivalence re
 
 \subsection{Connection to Dynamical Systems}
 
-Our results resonate with classical results in dynamical systems theory, particularly the Poincar\'e-Bendixson theorem \citep{guckenheimer2013nonlinear}, which states that continuous flows in $\R^2$ cannot exhibit chaotic behavior---only fixed points and limit cycles are possible. In $\R^3$ and higher, strange attractors and complex recurrent behavior become possible.
+Our results resonate with classical results in dynamical systems theory, particularly the Poincar\'e-Bendixson theorem \citep{poincare1881memoire,bendixson1901courbes,guckenheimer1983nonlinear}, which states that continuous flows in $\R^2$ cannot exhibit chaotic behavior---only fixed points and limit cycles are possible. In $\R^3$ and higher, strange attractors and complex recurrent behavior become possible.
 
 The parallel is suggestive: $k = 2$ naturally yields simple, categorical structure, while $k \geq 3$ \emph{can} support richer, process-oriented dynamics. Our contribution is to formalize this in an information-geometric setting.
 
@@ -335,8 +335,8 @@ While this paper focuses on the mathematical foundations, the results have poten
 
 \begin{itemize}
     \item \textbf{Neural coding:} Understanding when neural representations must be discrete vs.\ continuous \citep{gallego2017neural}.
-    \item \textbf{Machine learning:} Characterizing bottleneck dimensions in autoencoders and information bottleneck methods.
-    \item \textbf{Cognitive science:} Formalizing the emergence of symbolic thought from continuous neural dynamics.
+    \item \textbf{Machine learning:} Characterizing bottleneck dimensions in autoencoders and information bottleneck methods \citep{tishby2000information}.
+    \item \textbf{Cognitive science:} As a speculative future direction, formalizing the emergence of symbolic thought from continuous neural dynamics.
 \end{itemize}
 
 These applications are left for future work.
